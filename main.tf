@@ -28,7 +28,7 @@ data "aws_ami" "amazon_linux" {
 # セキュリティグループ設定
 # ===========================
 resource "aws_security_group" "web_sg" {
-  name        = "CL_iwasaki_sg"
+  name        = "CL_iwasaki_sg_default"
   description = "Security Group with intentional holes"
   vpc_id      = "vpc-0f9e349a1dfd9f1bf"
 

@@ -1,0 +1,35 @@
+name: Terraform only
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TF_STATE_BUCKET: ${{ secrets.TF_STATE_BUCKET }}
+
+    steps:
+      # 1. リポジトリチェックアウト
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Terraformセットアップ
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # 3. Terraform init
+      - name: Terraform Init
+        run: terraform init -backend-config="bucket=$TF_STATE_BUCKET"
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      # 4. Terraform apply
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
